@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f4f7fb"><title>WebSpace</title>
-<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=20260925-settings1">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=20260925-wallpaper1">
 </head>
 <body>
 <div class="shell">
@@ -19,6 +19,7 @@
 </div>
 <div id="weatherSizeModal" class="modal" hidden><div class="modalcard size-card"><button id="weatherSizeClose" class="round">×</button><h2>Weather Widget</h2><p>Choose a widget size.</p><div class="size-options"><button data-wsize="small"><strong>小型</strong><span>☀️ 30°</span></button><button data-wsize="medium"><strong>中型</strong><span>☀️ 30° · H/L</span></button><button data-wsize="large"><strong>大型</strong><span>完整天氣卡片</span></button></div></div></div>
 <div id="addModal" class="modal" hidden><div class="modalcard add-card"><button id="addClose" class="round">×</button><h2>Add App</h2><p>Add any web app to your Home Screen.</p><label>Name<input id="addName" autocomplete="off" placeholder="My App"></label><label>Website URL<input id="addUrl" type="url" inputmode="url" placeholder="https://example.com"></label><button id="addSave" class="add-save">Add to Home Screen</button></div></div>
-<div id="modal" class="modal" hidden><div class="modalcard settings-card"><button id="modalClose" class="round">×</button><h2>Settings</h2><p>Customize your WebSpace Home Screen.</p><div class="settings-list"><button id="settingsEdit"><span>Home Screen</span><small>Rearrange apps and widgets</small></button><button id="settingsAdd"><span>Add App</span><small>Add a web app to this device</small></button><div><span>Layout</span><small>4 apps per row · Stable mode</small></div><div><span>WebSpace</span><small>V1 · Your web apps, one workspace.</small></div></div></div></div>
-<script src="./app.js?v=20260925-settings1"></script>
+<div id="wallpaperModal" class="modal" hidden><div class="modalcard wallpaper-card"><button id="wallpaperClose" class="round">×</button><h2>Wallpaper</h2><p>Choose a background. Your choice stays on this device.</p><div class="wallpaper-options"><button data-wallpaper="ocean"><i></i><span>Ocean Glass</span></button><button data-wallpaper="sky"><i></i><span>Sky</span></button><button data-wallpaper="sunset"><i></i><span>Sunset</span></button><button data-wallpaper="midnight"><i></i><span>Midnight</span></button></div></div></div>
+<div id="modal" class="modal" hidden><div class="modalcard settings-card"><button id="modalClose" class="round">×</button><h2>Settings</h2><p>Customize your WebSpace Home Screen.</p><div class="settings-list"><button id="settingsEdit"><span>Home Screen</span><small>Rearrange apps and widgets</small></button><button id="settingsAdd"><span>Add App</span><small>Add a web app to this device</small></button><button id="settingsWallpaper"><span>Wallpaper</span><small>Choose a Home Screen background</small></button><div><span>Layout</span><small>4 apps per row · Stable mode</small></div><div><span>WebSpace</span><small>V1 · Your web apps, one workspace.</small></div></div></div></div>
+<script src="./app.js?v=20260925-wallpaper1"></script>
 </body></html>
