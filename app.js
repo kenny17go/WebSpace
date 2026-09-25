@@ -73,3 +73,15 @@ if(widgetArea){
  widgetArea.addEventListener("pointermove",e=>{if(!widgetTouch||!document.body.classList.contains("home-edit"))return;e.preventDefault();const target=document.elementFromPoint(e.clientX,e.clientY)?.closest(".home-widget"),moving=widgetArea.querySelector('[data-widget="'+widgetTouch+'"]');if(target&&moving&&target!==moving){const r=target.getBoundingClientRect();widgetArea.insertBefore(moving,e.clientY<r.top+r.height/2?target:target.nextSibling)}});
  const endWidget=()=>{if(widgetTouch)saveWidgetOrder();widgetTouch=null};widgetArea.addEventListener("pointerup",endWidget);widgetArea.addEventListener("pointercancel",endWidget);
 }
+function weatherWidgetSize(size){
+ const w=document.querySelector('[data-widget="weather"]'),b=$("#weatherSizeBtn");if(!w)return;
+ const allowed=["small","medium","large"];size=allowed.includes(size)?size:"medium";
+ w.dataset.size=size;w.classList.remove("size-small","size-medium","size-large");w.classList.add("size-"+size);
+ if(b)b.textContent=size==="small"?"小":size==="large"?"大":"中";
+ try{localStorage.setItem("webspace-weather-size",size)}catch{}
+}
+const weatherSizeBtn=$("#weatherSizeBtn"),weatherSizeModal=$("#weatherSizeModal"),weatherSizeClose=$("#weatherSizeClose");
+try{weatherWidgetSize(localStorage.getItem("webspace-weather-size")||"medium")}catch{weatherWidgetSize("medium")}
+if(weatherSizeBtn)weatherSizeBtn.onclick=e=>{e.stopPropagation();if(document.body.classList.contains("home-edit")&&weatherSizeModal)weatherSizeModal.hidden=false};
+if(weatherSizeClose)weatherSizeClose.onclick=()=>weatherSizeModal.hidden=true;
+if(weatherSizeModal){weatherSizeModal.onclick=e=>{if(e.target===weatherSizeModal)weatherSizeModal.hidden=true;const b=e.target.closest("[data-wsize]");if(b){weatherWidgetSize(b.dataset.wsize);weatherSizeModal.hidden=true}}}
