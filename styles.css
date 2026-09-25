@@ -120,3 +120,11 @@
  .home-widget.dragging{opacity:.55}
  @keyframes widgetWiggle{from{transform:rotate(-.25deg)}to{transform:rotate(.25deg)}}
 }
+.widget-size-btn{display:none}
+@media(max-width:820px){
+ body.home-edit .weather-widget .widget-size-btn{display:grid;place-items:center;position:absolute;left:8px;top:8px;z-index:9;width:30px;height:30px;border:0;border-radius:50%;background:#ffffffd8;color:#253b56;font-size:11px;font-weight:800;box-shadow:0 3px 12px #174b8b30;backdrop-filter:blur(16px)}
+ .weather-widget.size-small{width:46%;align-self:center}.weather-widget.size-small .home-weather{width:100%;min-height:70px;margin:20px auto 0;padding:10px 12px;border-radius:22px}.weather-widget.size-small .weather-glyph{font-size:27px}.weather-widget.size-small .home-weather>div{display:block}.weather-widget.size-small #homeTemp{display:inline;font-size:25px}.weather-widget.size-small #homeWeatherText,.weather-widget.size-small #homeRange{display:none}
+ .weather-widget.size-medium{width:100%}
+ .weather-widget.size-large{width:100%}.weather-widget.size-large .home-weather{min-height:126px;justify-content:flex-start;padding:20px 28px;border-radius:28px}.weather-widget.size-large .weather-glyph{font-size:52px}.weather-widget.size-large #homeTemp{font-size:38px}.weather-widget.size-large #homeWeatherText{font-size:14px}.weather-widget.size-large #homeRange{font-size:13px;margin-top:7px}
+ .size-options{display:grid;gap:10px;margin-top:18px}.size-options button{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border:1px solid #dce4ee;border-radius:16px;background:#f8fafc;color:#24344d;text-align:left}.size-options strong{font-size:15px}.size-options span{font-size:12px;color:#718096}
+}
