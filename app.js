@@ -116,3 +116,15 @@ normalizeUnifiedHome();
 const settingsEdit=$("#settingsEdit"),settingsAdd=$("#settingsAdd");
 if(settingsEdit)settingsEdit.onclick=()=>{if(modalEl)modalEl.hidden=true;setEditMode(true)};
 if(settingsAdd)settingsAdd.onclick=()=>{if(modalEl)modalEl.hidden=true;if(addModal)addModal.hidden=false};
+
+function setWallpaper(name){
+ const allowed=["ocean","sky","sunset","midnight"];name=allowed.includes(name)?name:"ocean";
+ document.body.dataset.wallpaper=name;
+ try{localStorage.setItem("webspace-wallpaper",name)}catch{}
+ document.querySelectorAll("[data-wallpaper]").forEach(b=>b.classList.toggle("selected",b.dataset.wallpaper===name));
+}
+const settingsWallpaper=$("#settingsWallpaper"),wallpaperModal=$("#wallpaperModal"),wallpaperClose=$("#wallpaperClose");
+try{setWallpaper(localStorage.getItem("webspace-wallpaper")||"ocean")}catch{setWallpaper("ocean")}
+if(settingsWallpaper)settingsWallpaper.onclick=()=>{if(modalEl)modalEl.hidden=true;if(wallpaperModal)wallpaperModal.hidden=false};
+if(wallpaperClose)wallpaperClose.onclick=()=>wallpaperModal.hidden=true;
+if(wallpaperModal)wallpaperModal.onclick=e=>{if(e.target===wallpaperModal)wallpaperModal.hidden=true;const b=e.target.closest("[data-wallpaper]");if(b){setWallpaper(b.dataset.wallpaper);wallpaperModal.hidden=true}};
