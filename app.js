@@ -12,15 +12,18 @@ function openApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;if(a.open==
 function closeApp(){$("#viewer").hidden=true;$("#frame").src="about:blank";document.body.style.overflow="";render()}
 function appClick(e){const c=e.target.closest(".card");if(c)openApp(c.dataset.id)}
 const appsEl=$("#apps"),dockEl=$("#dock"),closeEl=$("#close"),aboutEl=$("#about"),modalCloseEl=$("#modalClose"),modalEl=$("#modal"),search=$("#search");if(appsEl)appsEl.onclick=appClick;if(dockEl)dockEl.onclick=appClick;if(search)search.addEventListener("input",render);if(closeEl)closeEl.onclick=closeApp;if(aboutEl)aboutEl.onclick=()=>{if(modalEl)modalEl.hidden=false};if(modalCloseEl)modalCloseEl.onclick=()=>{if(modalEl)modalEl.hidden=true};if(modalEl)modalEl.onclick=e=>{if(e.target.id==="modal")modalEl.hidden=true};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeApp()});init();
-let draggedId=null,longPressTimer=null;
+let draggedId=null,longPressTimer=null,touchDragId=null,lastSwapId=null;
 function setEditMode(on){document.body.classList.toggle("home-edit",on);if(edit)edit.textContent=on?"Done":"•••";document.querySelectorAll(".card").forEach(c=>c.draggable=on)}
 const edit=$("#editHome");if(edit)edit.onclick=()=>setEditMode(!document.body.classList.contains("home-edit"));
+function moveAppBefore(fromId,toId){if(!fromId||!toId||fromId===toId)return;const from=allApps.findIndex(a=>a.id===fromId),to=allApps.findIndex(a=>a.id===toId);if(from<0||to<0)return;const [m]=allApps.splice(from,1);allApps.splice(to,0,m);saveAppOrder();render();setEditMode(true)}
 if(appsEl){
- appsEl.addEventListener("pointerdown",e=>{const c=e.target.closest(".card");if(!c||document.body.classList.contains("home-edit"))return;longPressTimer=setTimeout(()=>setEditMode(true),550)});
- ["pointerup","pointercancel","pointermove"].forEach(t=>appsEl.addEventListener(t,()=>{clearTimeout(longPressTimer)}));
+ appsEl.addEventListener("pointerdown",e=>{const c=e.target.closest(".card");if(!c)return;if(document.body.classList.contains("home-edit")){touchDragId=c.dataset.id;lastSwapId=c.dataset.id;c.setPointerCapture?.(e.pointerId);e.preventDefault();return}longPressTimer=setTimeout(()=>{setEditMode(true);touchDragId=c.dataset.id;lastSwapId=c.dataset.id},550)});
+ appsEl.addEventListener("pointermove",e=>{clearTimeout(longPressTimer);if(!touchDragId||!document.body.classList.contains("home-edit"))return;e.preventDefault();const el=document.elementFromPoint(e.clientX,e.clientY),target=el?.closest(".card");if(target&&target.dataset.id!==touchDragId&&target.dataset.id!==lastSwapId){lastSwapId=target.dataset.id;moveAppBefore(touchDragId,target.dataset.id)}});
+ const stopTouchDrag=()=>{clearTimeout(longPressTimer);touchDragId=null;lastSwapId=null};
+ appsEl.addEventListener("pointerup",stopTouchDrag);appsEl.addEventListener("pointercancel",stopTouchDrag);
  appsEl.addEventListener("dragstart",e=>{if(!document.body.classList.contains("home-edit"))return e.preventDefault();const c=e.target.closest(".card");if(!c)return;draggedId=c.dataset.id;c.classList.add("dragging");e.dataTransfer.effectAllowed="move"});
  appsEl.addEventListener("dragend",e=>{e.target.closest(".card")?.classList.remove("dragging");draggedId=null});
- appsEl.addEventListener("dragover",e=>{if(!draggedId)return;e.preventDefault();const target=e.target.closest(".card");if(!target||target.dataset.id===draggedId)return;const from=allApps.findIndex(a=>a.id===draggedId),to=allApps.findIndex(a=>a.id===target.dataset.id);if(from<0||to<0)return;const [m]=allApps.splice(from,1);allApps.splice(to,0,m);saveAppOrder();render();setEditMode(true)});
+ appsEl.addEventListener("dragover",e=>{if(!draggedId)return;e.preventDefault();const target=e.target.closest(".card");if(target)moveAppBefore(draggedId,target.dataset.id)});
  appsEl.addEventListener("click",e=>{if(document.body.classList.contains("home-edit"))e.stopImmediatePropagation()},true);
 }
 function updateHomeClock(){const d=new Date();const t=$("#homeTime"),dt=$("#homeDate");if(t)t.textContent=d.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});if(dt)dt.textContent=d.toLocaleDateString("zh-TW",{month:"long",day:"numeric",weekday:"short"})}updateHomeClock();setInterval(updateHomeClock,30000);
