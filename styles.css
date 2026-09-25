@@ -147,3 +147,10 @@
  .home-grid>#apps .card h3{font-size:11px;max-width:82px}
  .brand{gap:0}
 }
+
+.settings-button{font-size:20px;line-height:1}
+.settings-list{display:grid;gap:10px;margin-top:18px}
+.settings-list>button,.settings-list>div{box-sizing:border-box;width:100%;padding:14px 16px;border:1px solid #dce4ee;border-radius:16px;background:#f8fafc;text-align:left;color:#24344d}
+.settings-list>button{font:inherit;cursor:pointer}
+.settings-list span{display:block;font-size:14px;font-weight:750}
+.settings-list small{display:block;margin-top:3px;color:#718096;font-size:11px}
