@@ -1,30 +1,30 @@
 [
   {
-    "id": "market",
-    "name": "Global Market Monitor",
-    "description": "Cross-market monitoring dashboard",
+    "id": "english",
+    "name": "Highschool English 7000",
+    "description": "High-school English vocabulary learning",
+    "category": "Learning",
+    "icon": "Aa",
+    "tint": "#e8f1ff",
+    "url": "https://kenny17go.github.io/highschool-english-7000/"
+  },
+  {
+    "id": "treasury",
+    "name": "Treasury AI Market Dashboard",
+    "description": "Treasury and financial markets dashboard",
     "category": "Finance",
-    "icon": "📈",
+    "icon": "📊",
     "tint": "#e8f5ee",
-    "url": "https://kenny17go.github.io/global-market-monitor/"
+    "url": "https://kenny17go.github.io/treasury-ai-market-dashboard/"
   },
   {
-    "id": "alpha",
-    "name": "Alpha Model",
-    "description": "Research and watch-list intelligence",
-    "category": "Finance",
-    "icon": "α",
-    "tint": "#eeeafe",
-    "url": "https://kenny17go.github.io/alpha-model/"
-  },
-  {
-    "id": "bond",
-    "name": "Bond Fee Compare",
-    "description": "Overseas bond platform cost comparison",
-    "category": "Finance",
-    "icon": "💵",
-    "tint": "#fff2df",
-    "url": "https://kenny17go.github.io/bond-fee-compare/"
+    "id": "weather",
+    "name": "Weather Compare",
+    "description": "Compare weather across places and dates",
+    "category": "Utilities",
+    "icon": "☀️",
+    "tint": "#e7f5ff",
+    "url": "https://kenny17go.github.io/weather-compare/"
   },
   {
     "id": "school",
@@ -32,8 +32,17 @@
     "description": "High-school study and review platform",
     "category": "Learning",
     "icon": "🎓",
-    "tint": "#e8f1ff",
+    "tint": "#eeeafe",
     "url": "https://kenny17go.github.io/high-school-review/"
+  },
+  {
+    "id": "preferred",
+    "name": "Taiwan Preferred Stock",
+    "description": "Taiwan preferred stock information and tools",
+    "category": "Finance",
+    "icon": "TW",
+    "tint": "#fff2df",
+    "url": "https://kenny17go.github.io/taiwan-preferred-stock/"
   },
   {
     "id": "map",
@@ -43,14 +52,5 @@
     "icon": "🌏",
     "tint": "#e5f6f4",
     "url": "https://kenny17go.github.io/World-map-quiz-New/"
-  },
-  {
-    "id": "cards",
-    "name": "CardKeeper",
-    "description": "Business card scanning and management",
-    "category": "Utilities",
-    "icon": "▣",
-    "tint": "#f2eaff",
-    "url": "https://kenny17go.github.io/CardKeeper/"
   }
 ]
