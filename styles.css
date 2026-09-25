@@ -128,3 +128,15 @@
  .weather-widget.size-large{width:100%}.weather-widget.size-large .home-weather{min-height:126px;justify-content:flex-start;padding:20px 28px;border-radius:28px}.weather-widget.size-large .weather-glyph{font-size:52px}.weather-widget.size-large #homeTemp{font-size:38px}.weather-widget.size-large #homeWeatherText{font-size:14px}.weather-widget.size-large #homeRange{font-size:13px;margin-top:7px}
  .size-options{display:grid;gap:10px;margin-top:18px}.size-options button{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border:1px solid #dce4ee;border-radius:16px;background:#f8fafc;color:#24344d;text-align:left}.size-options strong{font-size:15px}.size-options span{font-size:12px;color:#718096}
 }
+@media(max-width:820px){
+ .home-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 10px;align-items:start}
+ .home-grid>.clock-widget{grid-column:1/-1;padding:26px 0 10px}
+ .home-grid>.weather-widget.size-small{grid-column:span 2;width:100%;align-self:stretch}
+ .home-grid>.weather-widget.size-medium,.home-grid>.weather-widget.size-large{grid-column:1/-1;width:100%}
+ .home-grid>.mobile-intro,.home-grid>.mobile-page-dots{grid-column:1/-1}
+ .home-grid>#apps{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 14px;margin-top:4px}
+ .desktop-apps{display:none!important}
+ main{display:none}
+ .widget-area{display:contents}
+}
+@media(min-width:821px){#homeGrid>#apps{display:none}}
