@@ -140,3 +140,10 @@
  .widget-area{display:contents}
 }
 @media(min-width:821px){#homeGrid>#apps{display:none}}
+
+@media(max-width:820px){
+ .home-grid>#apps{grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 8px}
+ .home-grid>#apps .icon{width:68px;height:68px;border-radius:17px}
+ .home-grid>#apps .card h3{font-size:11px;max-width:82px}
+ .brand{gap:0}
+}
