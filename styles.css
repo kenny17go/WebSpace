@@ -169,3 +169,13 @@
  body[data-wallpaper="midnight"]{background:radial-gradient(circle at 72% 18%,#315fa7aa,transparent 30%),linear-gradient(150deg,#101c3a 0%,#172f61 58%,#0a1429 100%);background-attachment:fixed}
  body[data-wallpaper="sky"]:before,body[data-wallpaper="sunset"]:before,body[data-wallpaper="midnight"]:before{opacity:.38}
 }
+
+
+/* iOS return-from-app viewport stability */
+@media(max-width:820px){
+ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;width:100%;overflow-x:hidden}
+ body{width:100%;min-width:0;overflow-x:hidden}
+ .shell,.home-grid,#apps{box-sizing:border-box;max-width:100%;min-width:0}
+ .home-grid>#apps .card{min-width:0;max-width:100%;overflow:visible}
+ .home-grid>#apps .icon{max-width:100%;object-fit:cover}
+}
