@@ -13,4 +13,24 @@ const appsEl=$("#apps"),dockEl=$("#dock"),closeEl=$("#close"),aboutEl=$("#about"
 const edit=$("#editHome");if(edit)edit.onclick=()=>{document.body.classList.toggle("home-edit");edit.textContent=document.body.classList.contains("home-edit")?"Done":"•••"};
 function updateHomeClock(){const d=new Date();const t=$("#homeTime"),dt=$("#homeDate");if(t)t.textContent=d.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});if(dt)dt.textContent=d.toLocaleDateString("zh-TW",{month:"long",day:"numeric",weekday:"short"})}updateHomeClock();setInterval(updateHomeClock,30000);
 const homeWx=(c,d=1)=>c===0?[d?"☀️":"🌙","晴朗"]:c<=2?[d?"🌤️":"☁️","晴時多雲"]:c===3?["☁️","陰天"]:c<=48?["🌫️","霧"]:c<=57?["🌦️","毛毛雨"]:c<=67?["🌧️","雨"]:c<=77?["🌨️","雪"]:c<=82?["🌦️","陣雨"]:c<=86?["🌨️","陣雪"]:["⛈️","雷雨"];
-async function loadHomeWeather(){const set=(s,v)=>{const e=$(s);if(e)e.textContent=v};try{const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{timeout:7000,maximumAge:900000})),{latitude,longitude}=p.coords,q=new URLSearchParams({latitude,longitude,timezone:"auto",forecast_days:"1",current:"temperature_2m,is_day,weather_code",daily:"temperature_2m_max,temperature_2m_min"}),r=await fetch("https://api.open-meteo.com/v1/forecast?"+q);if(!r.ok)throw 0;const x=await r.json(),w=homeWx(+x.current.weather_code,+x.current.is_day);set("#homeWeatherIcon",w[0]);set("#homeTemp",Math.round(x.current.temperature_2m)+"°");set("#homeWeatherText",w[1]);set("#homeRange","H:"+Math.round(x.daily.temperature_2m_max[0])+"° L:"+Math.round(x.daily.temperature_2m_min[0])+"°")}catch(e){set("#homeWeatherText","天氣暫時無法取得");set("#homeRange","開啟 Weather 查看")}}loadHomeWeather();
+async function loadHomeWeather(){
+ const set=(s,v)=>{const e=$(s);if(e)e.textContent=v};
+ const fetchWx=async(latitude,longitude)=>{
+  const q=new URLSearchParams({latitude,longitude,timezone:"auto",forecast_days:"1",current:"temperature_2m,is_day,weather_code",daily:"temperature_2m_max,temperature_2m_min"});
+  const r=await fetch("https://api.open-meteo.com/v1/forecast?"+q);if(!r.ok)throw Error("weather");
+  const x=await r.json(),w=homeWx(+x.current.weather_code,+x.current.is_day);
+  set("#homeWeatherIcon",w[0]);set("#homeTemp",Math.round(x.current.temperature_2m)+"°");set("#homeWeatherText",w[1]);
+  set("#homeRange","H:"+Math.round(x.daily.temperature_2m_max[0])+"° L:"+Math.round(x.daily.temperature_2m_min[0])+"°");
+  localStorage.setItem("webspace-weather",JSON.stringify({at:Date.now(),latitude,longitude}));
+ };
+ try{
+  const cached=JSON.parse(localStorage.getItem("webspace-weather")||"null");
+  if(cached&&Date.now()-cached.at<15*60*1000){await fetchWx(cached.latitude,cached.longitude);return}
+  if(!navigator.geolocation)throw Error("geo");
+  const p=await new Promise((ok,no)=>navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:false,timeout:10000,maximumAge:900000}));
+  await fetchWx(p.coords.latitude,p.coords.longitude);
+ }catch(e){
+  set("#homeWeatherIcon","☁️");set("#homeTemp","--°");set("#homeWeatherText","天氣暫時無法取得");set("#homeRange","Weather Compare 可查看完整預報");
+ }
+}
+setTimeout(loadHomeWeather,0);setInterval(loadHomeWeather,15*60*1000);
