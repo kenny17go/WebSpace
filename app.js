@@ -128,3 +128,35 @@ try{setWallpaper(localStorage.getItem("webspace-wallpaper")||"ocean")}catch{setW
 if(settingsWallpaper)settingsWallpaper.onclick=()=>{if(modalEl)modalEl.hidden=true;if(wallpaperModal)wallpaperModal.hidden=false};
 if(wallpaperClose)wallpaperClose.onclick=()=>wallpaperModal.hidden=true;
 if(wallpaperModal)wallpaperModal.onclick=e=>{if(e.target===wallpaperModal)wallpaperModal.hidden=true;const b=e.target.closest("[data-wallpaper]");if(b){setWallpaper(b.dataset.wallpaper);wallpaperModal.hidden=true}};
+
+
+/* V1 stable settings */
+const restoreModal=$("#restoreModal"),restoreClose=$("#restoreClose"),restoreList=$("#restoreList"),settingsRestore=$("#settingsRestore");
+async function renderRestoreApps(){
+ if(!restoreList)return;
+ const hidden=hiddenIds();
+ if(!hidden.length){restoreList.innerHTML='<div><span>No hidden apps</span><small>All default apps are already on your Home Screen.</small></div>';return}
+ try{
+  const defaults=await fetch("./apps.json",{cache:"no-store"}).then(r=>r.json());
+  restoreList.innerHTML=defaults.filter(a=>hidden.includes(a.id)).map(a=>'<button data-restore="'+a.id+'"><span>'+a.name+'</span><small>Restore to Home Screen</small></button>').join("")||'<div><span>No hidden apps</span></div>';
+ }catch{restoreList.innerHTML='<div><span>Unable to load apps</span></div>'}
+}
+if(settingsRestore)settingsRestore.onclick=async()=>{if(modalEl)modalEl.hidden=true;await renderRestoreApps();if(restoreModal)restoreModal.hidden=false};
+if(restoreClose)restoreClose.onclick=()=>restoreModal.hidden=true;
+if(restoreModal)restoreModal.onclick=async e=>{
+ if(e.target===restoreModal){restoreModal.hidden=true;return}
+ const b=e.target.closest("[data-restore]");if(!b)return;
+ const id=b.dataset.restore,hidden=hiddenIds().filter(x=>x!==id);
+ localStorage.setItem("webspace-hidden-apps",JSON.stringify(hidden));
+ await init();await renderRestoreApps();
+};
+
+const resetModal=$("#resetModal"),settingsReset=$("#settingsReset"),resetClose=$("#resetClose"),resetCancel=$("#resetCancel"),resetConfirm=$("#resetConfirm");
+if(settingsReset)settingsReset.onclick=()=>{if(modalEl)modalEl.hidden=true;if(resetModal)resetModal.hidden=false};
+const closeReset=()=>{if(resetModal)resetModal.hidden=true};
+if(resetClose)resetClose.onclick=closeReset;if(resetCancel)resetCancel.onclick=closeReset;
+if(resetModal)resetModal.onclick=e=>{if(e.target===resetModal)closeReset()};
+if(resetConfirm)resetConfirm.onclick=async()=>{
+ ["webspace-app-order","webspace-widget-order","webspace-home-order","webspace-weather-size","webspace-wallpaper"].forEach(k=>localStorage.removeItem(k));
+ setWallpaper("ocean");weatherWidgetSize("medium");closeReset();await init();location.reload();
+};
