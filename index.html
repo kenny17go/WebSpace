@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f4f7fb"><title>WebSpace</title>
-<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=20260925-editor1">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=20260925-appmanage1">
 </head>
 <body>
 <div class="shell">
@@ -11,12 +11,13 @@
 <section class="hero"><h1>Everything you use,<br><span>one space away.</span></h1><p>Open your web apps from a clean, fast workspace. Apps stay independent and load only when you need them.</p><div class="mobile-widget"><div><div id="homeTime" class="home-time">--:--</div><div id="homeDate" class="home-date"></div></div><div class="home-weather"><span id="homeWeatherIcon" class="weather-glyph">☀︎</span><div><strong id="homeTemp">--°</strong><small id="homeWeatherText">取得天氣中…</small><small id="homeRange">H:--° L:--°</small></div></div></div><div class="mobile-intro"><strong>WebSpace</strong><span id="mobileCount">6 apps</span></div><div class="mobile-page-dots"><i class="active"></i><i></i></div></section>
 <nav id="filters" class="filters"></nav>
 <main><div class="sectionhead allhead"><h2>Apps</h2><span>Your workspace</span></div><div id="apps" class="grid"></div><div id="empty" class="empty" hidden>No apps found.</div></main>
-<footer>WebSpace · V1</footer><button id="editHome" class="edit-home" aria-label="Customize home">•••</button>
+<footer>WebSpace · V1</footer><button id="addApp" class="add-app" hidden aria-label="Add app">＋</button><button id="editHome" class="edit-home" aria-label="Customize home">•••</button>
 </div><div id="dock" class="dock" aria-label="Open apps"></div>
 <div id="viewer" class="viewer" hidden>
 <div class="viewerbar"><button id="close" class="round">×</button><div><strong id="viewerTitle"></strong><small id="viewerUrl"></small></div><a id="external" target="_blank" rel="noopener">↗</a></div>
 <div id="loading" class="loading">Opening app…</div><iframe id="frame" title="Web app"></iframe>
 </div>
+<div id="addModal" class="modal" hidden><div class="modalcard add-card"><button id="addClose" class="round">×</button><h2>Add App</h2><p>Add any web app to your Home Screen.</p><label>Name<input id="addName" autocomplete="off" placeholder="My App"></label><label>Website URL<input id="addUrl" type="url" inputmode="url" placeholder="https://example.com"></label><button id="addSave" class="add-save">Add to Home Screen</button></div></div>
 <div id="modal" class="modal" hidden><div class="modalcard"><button id="modalClose" class="round">×</button><h2>WebSpace</h2><p>A lightweight home for independent web apps. Add or remove apps in <code>apps.json</code> without changing the workspace.</p></div></div>
-<script src="./app.js?v=20260925-direct-mobile"></script>
+<script src="./app.js?v=20260925-appmanage1"></script>
 </body></html>
