@@ -112,3 +112,7 @@ function normalizeUnifiedHome(){
  applyHomeOrder();
 }
 normalizeUnifiedHome();
+
+const settingsEdit=$("#settingsEdit"),settingsAdd=$("#settingsAdd");
+if(settingsEdit)settingsEdit.onclick=()=>{if(modalEl)modalEl.hidden=true;setEditMode(true)};
+if(settingsAdd)settingsAdd.onclick=()=>{if(modalEl)modalEl.hidden=true;if(addModal)addModal.hidden=false};
