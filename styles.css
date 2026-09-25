@@ -179,3 +179,7 @@
  .home-grid>#apps .card{min-width:0;max-width:100%;overflow:visible}
  .home-grid>#apps .icon{max-width:100%;object-fit:cover}
 }
+
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.confirm-actions button{padding:13px 14px;border:1px solid #dce4ee;border-radius:14px;background:#f8fafc;color:#24344d;font:inherit;font-weight:750}
+.confirm-actions .danger-action{background:#e5484d;border-color:#e5484d;color:#fff}
