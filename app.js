@@ -1,16 +1,28 @@
 let allApps=[],active="All";const $=s=>document.querySelector(s);
-async function init(){try{allApps=await fetch("./apps.json",{cache:"no-store"}).then(r=>r.json());renderFilters();render();renderDock();const mc=$("#mobileCount");if(mc)mc.textContent=`${allApps.length} apps`}catch(e){$("#apps").innerHTML="<p>Unable to load apps.</p>"}}
+async function init(){try{allApps=await fetch("./apps.json",{cache:"no-store"}).then(r=>r.json());applySavedOrder();renderFilters();render();renderDock();const mc=$("#mobileCount");if(mc)mc.textContent=`${allApps.length} apps`}catch(e){$("#apps").innerHTML="<p>Unable to load apps.</p>"}}
 function recentIds(){try{return JSON.parse(localStorage.getItem("webspace-recent")||"[]")}catch{return[]}}
 function renderFilters(){const cats=["All",...new Set(allApps.map(a=>a.category))];$("#filters").innerHTML=cats.map(c=>`<button class="${c===active?"active":""}" data-cat="${c}">${c}</button>`).join("");$("#filters").onclick=e=>{if(!e.target.dataset.cat)return;active=e.target.dataset.cat;renderFilters();render()}}
 function iconMarkup(a){if(a.iconUrl)return `<img src="${a.iconUrl}" alt="">`;return a.icon||"W"}
 function card(a){return `<button class="card" data-id="${a.id}" style="--tint:${a.tint}"><div class="icon">${iconMarkup(a)}</div><h3>${a.name}</h3><p>${a.description}</p><span class="tag">${a.category}</span></button>`}
+function applySavedOrder(){try{const order=JSON.parse(localStorage.getItem("webspace-app-order")||"[]");if(!order.length)return;const rank=new Map(order.map((id,i)=>[id,i]));allApps.sort((a,b)=>(rank.get(a.id)??999)-(rank.get(b.id)??999))}catch{}}
+function saveAppOrder(){try{localStorage.setItem("webspace-app-order",JSON.stringify(allApps.map(a=>a.id)))}catch{}}
 function render(){const search=$("#search"),q=search?search.value.trim().toLowerCase():"";const apps=allApps.filter(a=>(active==="All"||a.category===active)&&(!q||[a.name,a.description,a.category].join(" ").toLowerCase().includes(q)));$("#empty").hidden=!!apps.length;$("#apps").innerHTML=apps.map(card).join("")}
 function renderDock(){const ids=recentIds();const open=allApps.filter(a=>ids.includes(a.id)).slice(0,5);$("#dock").innerHTML=open.map(a=>`<button data-id="${a.id}" title="${a.name}" style="--tint:${a.tint}">${iconMarkup(a)}</button>`).join("");$("#dock").classList.toggle("show",open.length>0)}
 function openApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;if(a.open==="external"){window.open(a.url,"_blank","noopener");return}$("#viewerTitle").textContent=a.name;$("#viewerUrl").textContent=a.url;$("#external").href=a.url;$("#viewer").hidden=false;document.body.style.overflow="hidden";$("#frame").src=a.url;try{const recent=recentIds().filter(x=>x!==id);localStorage.setItem("webspace-recent",JSON.stringify([id,...recent].slice(0,6)));renderDock()}catch{}}
 function closeApp(){$("#viewer").hidden=true;$("#frame").src="about:blank";document.body.style.overflow="";render()}
 function appClick(e){const c=e.target.closest(".card");if(c)openApp(c.dataset.id)}
 const appsEl=$("#apps"),dockEl=$("#dock"),closeEl=$("#close"),aboutEl=$("#about"),modalCloseEl=$("#modalClose"),modalEl=$("#modal"),search=$("#search");if(appsEl)appsEl.onclick=appClick;if(dockEl)dockEl.onclick=appClick;if(search)search.addEventListener("input",render);if(closeEl)closeEl.onclick=closeApp;if(aboutEl)aboutEl.onclick=()=>{if(modalEl)modalEl.hidden=false};if(modalCloseEl)modalCloseEl.onclick=()=>{if(modalEl)modalEl.hidden=true};if(modalEl)modalEl.onclick=e=>{if(e.target.id==="modal")modalEl.hidden=true};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeApp()});init();
-const edit=$("#editHome");if(edit)edit.onclick=()=>{document.body.classList.toggle("home-edit");edit.textContent=document.body.classList.contains("home-edit")?"Done":"•••"};
+let draggedId=null,longPressTimer=null;
+function setEditMode(on){document.body.classList.toggle("home-edit",on);if(edit)edit.textContent=on?"Done":"•••";document.querySelectorAll(".card").forEach(c=>c.draggable=on)}
+const edit=$("#editHome");if(edit)edit.onclick=()=>setEditMode(!document.body.classList.contains("home-edit"));
+if(appsEl){
+ appsEl.addEventListener("pointerdown",e=>{const c=e.target.closest(".card");if(!c||document.body.classList.contains("home-edit"))return;longPressTimer=setTimeout(()=>setEditMode(true),550)});
+ ["pointerup","pointercancel","pointermove"].forEach(t=>appsEl.addEventListener(t,()=>{clearTimeout(longPressTimer)}));
+ appsEl.addEventListener("dragstart",e=>{if(!document.body.classList.contains("home-edit"))return e.preventDefault();const c=e.target.closest(".card");if(!c)return;draggedId=c.dataset.id;c.classList.add("dragging");e.dataTransfer.effectAllowed="move"});
+ appsEl.addEventListener("dragend",e=>{e.target.closest(".card")?.classList.remove("dragging");draggedId=null});
+ appsEl.addEventListener("dragover",e=>{if(!draggedId)return;e.preventDefault();const target=e.target.closest(".card");if(!target||target.dataset.id===draggedId)return;const from=allApps.findIndex(a=>a.id===draggedId),to=allApps.findIndex(a=>a.id===target.dataset.id);if(from<0||to<0)return;const [m]=allApps.splice(from,1);allApps.splice(to,0,m);saveAppOrder();render();setEditMode(true)});
+ appsEl.addEventListener("click",e=>{if(document.body.classList.contains("home-edit"))e.stopImmediatePropagation()},true);
+}
 function updateHomeClock(){const d=new Date();const t=$("#homeTime"),dt=$("#homeDate");if(t)t.textContent=d.toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});if(dt)dt.textContent=d.toLocaleDateString("zh-TW",{month:"long",day:"numeric",weekday:"short"})}updateHomeClock();setInterval(updateHomeClock,30000);
 const homeWx=(c,d=1)=>c===0?[d?"☀️":"🌙","晴朗"]:c<=2?[d?"🌤️":"☁️","晴時多雲"]:c===3?["☁️","陰天"]:c<=48?["🌫️","霧"]:c<=57?["🌦️","毛毛雨"]:c<=67?["🌧️","雨"]:c<=77?["🌨️","雪"]:c<=82?["🌦️","陣雨"]:c<=86?["🌨️","陣雪"]:["⛈️","雷雨"];
 async function loadHomeWeather(){
