@@ -11,12 +11,12 @@ function iconMarkup(a){if(a.iconUrl)return `<img src="${a.iconUrl}" alt="">`;ret
 function card(a){return `<button class="card" data-id="${a.id}" style="--tint:${a.tint}"><span class="remove-app" data-remove="${a.id}" aria-label="Remove">−</span><div class="icon">${iconMarkup(a)}</div><h3>${a.name}</h3><p>${a.description}</p><span class="tag">${a.category}</span></button>`}
 function applySavedOrder(){try{const order=JSON.parse(localStorage.getItem("webspace-app-order")||"[]");if(!order.length)return;const rank=new Map(order.map((id,i)=>[id,i]));allApps.sort((a,b)=>(rank.get(a.id)??999)-(rank.get(b.id)??999))}catch{}}
 function saveAppOrder(){try{localStorage.setItem("webspace-app-order",JSON.stringify(allApps.map(a=>a.id)))}catch{}}
-function render(){const search=$("#search"),q=search?search.value.trim().toLowerCase():"";const apps=allApps.filter(a=>(active==="All"||a.category===active)&&(!q||[a.name,a.description,a.category].join(" ").toLowerCase().includes(q)));$("#empty").hidden=!!apps.length;$("#apps").innerHTML=apps.map(card).join("")}
+function render(){const search=$("#search"),q=search?search.value.trim().toLowerCase():"";const apps=allApps.filter(a=>(active==="All"||a.category===active)&&(!q||[a.name,a.description,a.category].join(" ").toLowerCase().includes(q)));$("#empty").hidden=!!apps.length;const mobile=$("#apps"),desktop=$("#desktopApps");if(mobile)mobile.innerHTML=apps.map(card).join("");if(desktop)desktop.innerHTML=apps.map(card).join("");if(document.body.classList.contains("home-edit"))setEditMode(true)}
 function renderDock(){const ids=recentIds();const open=allApps.filter(a=>ids.includes(a.id)).slice(0,5);$("#dock").innerHTML=open.map(a=>`<button data-id="${a.id}" title="${a.name}" style="--tint:${a.tint}">${iconMarkup(a)}</button>`).join("");$("#dock").classList.toggle("show",open.length>0)}
 function openApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;const phone=window.matchMedia("(max-width: 600px) and (pointer: coarse)").matches;if(phone||a.open==="external"){window.location.href=a.url;return}$("#viewerTitle").textContent=a.name;$("#viewerUrl").textContent=a.url;$("#external").href=a.url;$("#viewer").hidden=false;document.body.style.overflow="hidden";$("#frame").src=a.url;try{const recent=recentIds().filter(x=>x!==id);localStorage.setItem("webspace-recent",JSON.stringify([id,...recent].slice(0,6)));renderDock()}catch{}}
 function closeApp(){$("#viewer").hidden=true;$("#frame").src="about:blank";document.body.style.overflow="";render()}
 function appClick(e){const c=e.target.closest(".card");if(c)openApp(c.dataset.id)}
-const appsEl=$("#apps"),dockEl=$("#dock"),closeEl=$("#close"),aboutEl=$("#about"),modalCloseEl=$("#modalClose"),modalEl=$("#modal"),search=$("#search");if(appsEl)appsEl.onclick=appClick;if(dockEl)dockEl.onclick=appClick;if(search)search.addEventListener("input",render);if(closeEl)closeEl.onclick=closeApp;if(aboutEl)aboutEl.onclick=()=>{if(modalEl)modalEl.hidden=false};if(modalCloseEl)modalCloseEl.onclick=()=>{if(modalEl)modalEl.hidden=true};if(modalEl)modalEl.onclick=e=>{if(e.target.id==="modal")modalEl.hidden=true};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeApp()});init();
+const appsEl=$("#apps"),desktopAppsEl=$("#desktopApps"),dockEl=$("#dock"),closeEl=$("#close"),aboutEl=$("#about"),modalCloseEl=$("#modalClose"),modalEl=$("#modal"),search=$("#search");if(appsEl)appsEl.onclick=appClick;if(desktopAppsEl)desktopAppsEl.onclick=appClick;if(dockEl)dockEl.onclick=appClick;if(search)search.addEventListener("input",render);if(closeEl)closeEl.onclick=closeApp;if(aboutEl)aboutEl.onclick=()=>{if(modalEl)modalEl.hidden=false};if(modalCloseEl)modalCloseEl.onclick=()=>{if(modalEl)modalEl.hidden=true};if(modalEl)modalEl.onclick=e=>{if(e.target.id==="modal")modalEl.hidden=true};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeApp()});init();
 let draggedId=null,longPressTimer=null,touchDragId=null,lastSwapId=null;
 function setEditMode(on){document.body.classList.toggle("home-edit",on);if(edit)edit.textContent=on?"Done":"•••";const add=$("#addApp");if(add)add.hidden=!on;document.querySelectorAll(".card").forEach(c=>c.draggable=on);document.querySelectorAll(".home-widget").forEach(w=>w.draggable=on)}
 const edit=$("#editHome");if(edit)edit.onclick=()=>setEditMode(!document.body.classList.contains("home-edit"));
@@ -85,3 +85,30 @@ try{weatherWidgetSize(localStorage.getItem("webspace-weather-size")||"medium")}c
 if(weatherSizeBtn)weatherSizeBtn.onclick=e=>{e.stopPropagation();if(document.body.classList.contains("home-edit")&&weatherSizeModal)weatherSizeModal.hidden=false};
 if(weatherSizeClose)weatherSizeClose.onclick=()=>weatherSizeModal.hidden=true;
 if(weatherSizeModal){weatherSizeModal.onclick=e=>{if(e.target===weatherSizeModal)weatherSizeModal.hidden=true;const b=e.target.closest("[data-wsize]");if(b){weatherWidgetSize(b.dataset.wsize);weatherSizeModal.hidden=true}}}
+
+const homeGrid=$("#homeGrid");
+function applyHomeOrder(){
+ if(!homeGrid||innerWidth>820)return;
+ try{
+  const order=JSON.parse(localStorage.getItem("webspace-home-order")||"[]");
+  order.forEach(key=>{
+   let el=null;
+   if(key==="widget:clock")el=document.querySelector('[data-widget="clock"]');
+   else if(key==="widget:weather")el=document.querySelector('[data-widget="weather"]');
+   else if(key==="apps")el=$("#apps");
+   if(el)homeGrid.appendChild(el);
+  });
+ }catch{}
+}
+function saveHomeOrder(){
+ if(!homeGrid)return;
+ const order=[...homeGrid.children].map(el=>el.dataset?.widget?"widget:"+el.dataset.widget:el.id==="apps"?"apps":null).filter(Boolean);
+ try{localStorage.setItem("webspace-home-order",JSON.stringify(order))}catch{}
+}
+function normalizeUnifiedHome(){
+ if(!homeGrid||innerWidth>820)return;
+ const wa=$("#widgetArea");
+ if(wa){[...wa.querySelectorAll(".home-widget")].forEach(w=>homeGrid.insertBefore(w,$(".mobile-intro")));wa.remove()}
+ applyHomeOrder();
+}
+normalizeUnifiedHome();
