@@ -1,47 +1,42 @@
 [
   {
     "id": "english",
-    "name": "Highschool English 7000",
+    "name": "English 7000",
     "description": "High-school English vocabulary learning",
     "category": "Learning",
-    "icon": "Aa",
-    "tint": "#e8f1ff",
+    "iconUrl": "https://kenny17go.github.io/highschool-english-7000/icons/icon-192.png",
     "url": "https://kenny17go.github.io/highschool-english-7000/"
   },
   {
     "id": "treasury",
-    "name": "Treasury AI Market Dashboard",
+    "name": "Treasury",
     "description": "Treasury and financial markets dashboard",
     "category": "Finance",
-    "icon": "📊",
-    "tint": "#e8f5ee",
+    "iconUrl": "https://kenny17go.github.io/treasury-ai-market-dashboard/apple-touch-icon.png",
     "url": "https://kenny17go.github.io/treasury-ai-market-dashboard/"
   },
   {
     "id": "weather",
-    "name": "Weather Compare",
+    "name": "Weather",
     "description": "Compare weather across places and dates",
     "category": "Utilities",
-    "icon": "☀️",
-    "tint": "#e7f5ff",
+    "iconUrl": "https://kenny17go.github.io/weather-compare/icon-512.png",
     "url": "https://kenny17go.github.io/weather-compare/"
   },
   {
     "id": "school",
-    "name": "High School Review",
+    "name": "School Review",
     "description": "High-school study and review platform",
     "category": "Learning",
-    "icon": "🎓",
-    "tint": "#eeeafe",
+    "iconUrl": "https://kenny17go.github.io/high-school-review/apple-touch-icon.png",
     "url": "https://kenny17go.github.io/high-school-review/"
   },
   {
     "id": "preferred",
-    "name": "Taiwan Preferred Stock",
+    "name": "Preferred Stock",
     "description": "Taiwan preferred stock information and tools",
     "category": "Finance",
-    "icon": "TW",
-    "tint": "#fff2df",
+    "iconUrl": "https://kenny17go.github.io/taiwan-preferred-stock/icons/apple-touch-icon.png",
     "url": "https://kenny17go.github.io/taiwan-preferred-stock/"
   },
   {
@@ -49,8 +44,7 @@
     "name": "World Map Quiz",
     "description": "Interactive geography learning",
     "category": "Learning",
-    "icon": "🌏",
-    "tint": "#e5f6f4",
+    "iconUrl": "https://kenny17go.github.io/World-map-quiz-New/icon-180.png",
     "url": "https://kenny17go.github.io/World-map-quiz-New/"
   }
 ]
