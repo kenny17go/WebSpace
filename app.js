@@ -1,5 +1,5 @@
 let allApps=[],active="All";const $=s=>document.querySelector(s);
-async function init(){try{allApps=await fetch("./apps.json",{cache:"no-store"}).then(r=>r.json());renderFilters();render();renderDock()}catch(e){$("#apps").innerHTML="<p>Unable to load apps.</p>"}}
+async function init(){try{allApps=await fetch("./apps.json",{cache:"no-store"}).then(r=>r.json());renderFilters();render();renderDock();const mc=$("#mobileCount");if(mc)mc.textContent=`${allApps.length} apps`}catch(e){$("#apps").innerHTML="<p>Unable to load apps.</p>"}}
 function recentIds(){try{return JSON.parse(localStorage.getItem("webspace-recent")||"[]")}catch{return[]}}
 function renderFilters(){const cats=["All",...new Set(allApps.map(a=>a.category))];$("#filters").innerHTML=cats.map(c=>`<button class="${c===active?"active":""}" data-cat="${c}">${c}</button>`).join("");$("#filters").onclick=e=>{if(!e.target.dataset.cat)return;active=e.target.dataset.cat;renderFilters();render()}}
 function card(a){return `<button class="card" data-id="${a.id}" style="--tint:${a.tint}"><div class="icon">${a.iconUrl?`<img src="${a.iconUrl}" alt="">`:a.icon}</div><h3>${a.name}</h3><p>${a.description}</p><span class="tag">${a.category}</span></button>`}
@@ -9,3 +9,4 @@ function openApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;if(a.open==
 function closeApp(){$("#viewer").hidden=true;$("#frame").src="about:blank";document.body.style.overflow="";render()}
 function appClick(e){const c=e.target.closest(".card");if(c)openApp(c.dataset.id)}
 $("#apps").onclick=appClick;$("#recentApps").onclick=appClick;$("#dock").onclick=appClick;$("#search").addEventListener("input",render);$("#close").onclick=closeApp;$("#about").onclick=()=>$("#modal").hidden=false;$("#modalClose").onclick=()=>$("#modal").hidden=true;$("#modal").onclick=e=>{if(e.target.id==="modal")$("#modal").hidden=true};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeApp()});init();
+const edit=$("#editHome");if(edit)edit.onclick=()=>{document.body.classList.toggle("home-edit");edit.textContent=document.body.classList.contains("home-edit")?"Done":"•••"};
