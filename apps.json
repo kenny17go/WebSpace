@@ -1,0 +1,56 @@
+[
+  {
+    "id": "market",
+    "name": "Global Market Monitor",
+    "description": "Cross-market monitoring dashboard",
+    "category": "Finance",
+    "icon": "📈",
+    "tint": "#e8f5ee",
+    "url": "https://kenny17go.github.io/global-market-monitor/"
+  },
+  {
+    "id": "alpha",
+    "name": "Alpha Model",
+    "description": "Research and watch-list intelligence",
+    "category": "Finance",
+    "icon": "α",
+    "tint": "#eeeafe",
+    "url": "https://kenny17go.github.io/alpha-model/"
+  },
+  {
+    "id": "bond",
+    "name": "Bond Fee Compare",
+    "description": "Overseas bond platform cost comparison",
+    "category": "Finance",
+    "icon": "💵",
+    "tint": "#fff2df",
+    "url": "https://kenny17go.github.io/bond-fee-compare/"
+  },
+  {
+    "id": "school",
+    "name": "High School Review",
+    "description": "High-school study and review platform",
+    "category": "Learning",
+    "icon": "🎓",
+    "tint": "#e8f1ff",
+    "url": "https://kenny17go.github.io/high-school-review/"
+  },
+  {
+    "id": "map",
+    "name": "World Map Quiz",
+    "description": "Interactive geography learning",
+    "category": "Learning",
+    "icon": "🌏",
+    "tint": "#e5f6f4",
+    "url": "https://kenny17go.github.io/World-map-quiz-New/"
+  },
+  {
+    "id": "cards",
+    "name": "CardKeeper",
+    "description": "Business card scanning and management",
+    "category": "Utilities",
+    "icon": "▣",
+    "tint": "#f2eaff",
+    "url": "https://kenny17go.github.io/CardKeeper/"
+  }
+]
